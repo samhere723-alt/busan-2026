@@ -453,6 +453,14 @@ const P = {
     check:"⚠️ D3 是週一 — 韓國百貨每月公休日常排週一。出發前上 lotteshopping.com 查 9 月公休日，別白跑。頂樓有免費空中花園。"},
   biff:{n:"BIFF 廣場・光復路",kr:"비프광장",addr:"부산 중구 구덕로 44",nid:"11672349",conf:"ok",area:"南浦",type:"shop",tag:"逛街",
     tip:"路邊攤：糖餅（씨앗호떡）是釜山名物。等回程時間的最佳殺時間點。"},
+  kalguksu31:{n:"해운대31cm해물칼국수 本店（海鮮刀削麵）",kr:"해운대31cm해물칼국수 본점",addr:"부산 해운대구 좌동로91번길 10 좌동재래시장",conf:"ok",area:"海雲台",type:"food",tag:"刀削麵",
+    hours:"週二–日 11:00–21:00（<b>週一公休</b>・D2 是週日照開）",price:"31cm해물칼국수 ₩7,000",
+    must:["31cm해물칼국수 海鮮刀削麵 ₩7,000","홍합탕 淡菜湯 ₩8,000","물총조개탕 蛤蜊湯 ₩10,000"],
+    tip:"用<b>直徑 31 公分的大碗</b>裝，滿滿淡菜、扇貝、蛤蜊配白麵，一碗才 ₩7,000。在佐洞傳統市場裡，是海雲台這一帶最有名的海鮮刀削麵。<br><br>從青沙浦搭計程車約 8 分鐘。<b>된장내음（豬肉湯飯）就在同一區</b>，兩家距離走路 10 分鐘 —— 同一趟你想吃哪種都行。"},
+  gukbapN:{n:"일등가마솥돼지국밥 南浦店（豬肉湯飯）",kr:"일등가마솥돼지국밥 남포점",addr:"부산 중구 비프광장로 5",conf:"ok",area:"南浦",type:"food",tag:"豬肉湯飯",
+    hours:"24 小時（週日 21:00–週一 09:00 休・D3 中午照開）",
+    must:["돼지국밥 豬肉湯飯","수육백반 白切肉定食"],
+    tip:"就在 <b>BIFF 廣場旁</b>，跟你 D3 要去的國際市場、南浦大創走路都在三分鐘內。札嘎其站 3 號出口走 4 分。<br><br>釜山豬肉湯飯的本場就在這一帶，這家是在地人常吃的 24 小時老店。"},
   motiver:{n:"MOTIVER 모티버（愛心法式吐司）",kr:"모티버",addr:"부산 부산진구 서전로58번길 8 2층",conf:"ok",area:"田浦",type:"cafe",tag:"咖啡",
     hours:"週一–六 10:00–22:00／週日 10:00–21:00",src:"IG",
     tip:"IG 那則「釜山在地人又又又回訪的 3 家咖啡」之一。招牌是<b>愛心形狀的法式吐司</b>，留言區有人特別點名。<br><br>就在田浦，離你飯店走路幾分鐘，跟 소문난손칼국수 同一條巷（서전로58번길）。"},
@@ -541,9 +549,12 @@ const DAYS = [
       det:"2 公里、約 30 分、離地 7–10 公尺。<b>務必先線上預約</b>，實際時間依你訂到的時段調整 — 週日現場票常常沒了。"},
     {t:"11:05",p:"daritdol",n:"青沙浦踏石展望台",type:"sight",
       det:"免費玻璃棧道，下車走幾分鐘。"},
-    {t:"11:40",n:"午餐（這裡我改了，看說明）",p:"cheongsapo",type:"food",key:true,
-      det:"你原本寫「青沙浦・海鮮麵疙瘩」。查下來 IG 那家麵疙瘩（부제비）其實在西面，青沙浦主力是烤貝與生魚片。<br><br><b>兩條路你挑：</b><br><b>A｜就地吃海鮮</b> — 青沙浦烤貝街隨意挑一家，海景配貝類。<br><b>B｜搭海邊列車回中洞吃 된장내음</b> — IG 認證的大醬豬肉湯飯，₩9,000，全店只賣這一種定食。我推 B，因為它同時把你「豬肉湯飯」那格打勾了。",
-      sub:["doenjang","beachtrain"]},
+    {mv:"青沙浦 → 佐洞市場 · 計程車約 8 分"},
+    {t:"11:50",p:"kalguksu31",n:"午餐：해운대31cm해물칼국수",type:"food",key:true,star:"🍜 你要的海鮮刀削麵",
+      det:"<b>直徑 31 公分的大碗</b>，滿滿淡菜、扇貝、蛤蜊配白麵，一碗 ₩7,000。在佐洞傳統市場裡，海雲台這一帶最有名的海鮮刀削麵。<br><br>週一公休，但 D2 是週日、照常開。",
+      alt:["<b>된장내음（大醬豬肉湯飯 ₩9,000）</b> — IG 認證，全店只賣這一種定食，就在同一區走路 10 分鐘。想改吃湯飯就走這家。",
+           "青沙浦烤貝街（도희네 조개구이）— 海景配貝類，但不是你清單上的四種"],
+      sub:["doenjang","cheongsapo"]},
     {mv:"海邊列車 青沙浦 → 尾浦 · 沿海慢車約 15 分"},
     {t:"13:30",p:"miffy",n:"🐰 Miffy Store ＋ 海雲台海灘散步",type:"shop",key:true,star:"🐰 這段抓兩小時",
       det:"<b>海邊列車下車就到 — Miffy Store 就在尾浦站（藍線公園）正前方。</b><br><br>店是 <b>50 坪獨立門市</b>，不是百貨裡的小專櫃，慢慢挑加結帳抓 <b>45 分鐘</b>。釜山限定：札嘎其版娃娃 3 款、水手版 2 款、釜山觀光米菲、釜山鈴鑰圈，還有<b>海雲台限定電車版娃娃鑰圈</b> — 配色照著你上午搭的那台藍線列車做的，只有這家買得到。<br><br>逛完直接接沙灘：從尾浦沿海灘往西走就是海雲台海水浴場，走一段再切進後街選物店群（IN THE STREET、Luft Mansion、POTSHOP、Omyohan、Soyogi）。順路不用繞。",
@@ -581,8 +592,9 @@ const DAYS = [
     {mv:"公車／計程車 · 約 15 分（島內）"},
     {t:"11:30",p:"momos",n:"MOMOS COFFEE 影島烘豆所",type:"cafe",key:true,
       det:"08:00–18:00。碼頭倉庫改建、看得到海、2026 世界百大咖啡 #22。你要的「看海咖啡廳」這家等級最高。"},
-    {t:"12:30",n:"午餐（影島或南浦）",type:"food",
-      det:"沒硬排。影島隨機找，或撐到南浦吃。<br>沒吃到的類別可以在這補：刀削麵 / 豬肉湯飯 / 烤肉，看「吃」分頁還缺哪一格。"},
+    {t:"12:30",p:"gukbapN",n:"午餐：일등가마솥돼지국밥 南浦店",type:"food",key:true,star:"🍲 你要的豬肉湯飯",
+      det:"就在 BIFF 廣場旁，跟等一下要去的國際市場、南浦大創走路都三分鐘內。<br><br>24 小時營業（只有週日晚上到週一早上 9 點休），D3 中午照常開。釜山豬肉湯飯的本場就在這一帶。",
+      alt:["제일돼지국밥（중구 남포길 49・10:00–22:00・南浦站 3 號出口走 1 分）"]},
     {mv:"島內移動 · 約 10 分"},
     {mv:"過影島大橋 → 南浦 · 約 15 分"},
     {t:"13:30",p:"gukje",n:"國際市場・買棉被",type:"shop",key:true,star:"🧵 你指定提前到這格",
@@ -607,9 +619,9 @@ const DAYS = [
 /* ---- 必吃四格 ---- */
 const MUSTS = [
   {id:"m1",e:"🥩",n:"烤肉",w:"고기의진수（D2 晚）"},
-  {id:"m2",e:"🍜",n:"海鮮刀削麵/麵疙瘩",w:"부제비（D1 午）"},
+  {id:"m2",e:"🍜",n:"海鮮刀削麵/麵疙瘩",w:"부제비 D1午・31cm D2午"},
   {id:"m3",e:"🍚",n:"釜飯 솥밥",w:"한다솥（D1 晚）"},
-  {id:"m4",e:"🍲",n:"豬肉湯飯",w:"된장내음 / 송정3대（D2 午）"}
+  {id:"m4",e:"🍲",n:"豬肉湯飯",w:"일등가마솥 남포（D3 午）"}
 ];
 
 /* ---- 出發前待辦 ---- */
@@ -818,9 +830,13 @@ function renderPrep(){
 
 /* ---------- 吃 ---------- */
 function renderFood(){
-  const order=["bujebi","somunan","gogi","handasot","doenjang","songjeong","cheongsapo"];
+  const order=["bujebi","kalguksu31","somunan","gogi","handasot","gukbapN","doenjang","songjeong","yeongjin","cheongsapo"];
   const cafes=["momos","haute","strut","motiver","awluk","gongwon","nemone"];
-  let h=`<div class="banner"><b>必吃四格 — 點一下打勾。</b>四格全滿代表你把最想吃的類型都吃到了。</div>`;
+  let h=`<div class="banner"><b>必吃四格 — 點一下打勾。</b>四種各自有專屬的一餐，不會被別的東西擠掉：<br>
+🍜 刀削麵/麵疙瘩 → D1 午 부제비・D2 午 31cm해물칼국수<br>
+🍚 釜飯 → D1 晚 한다솥<br>
+🥩 烤肉 → D2 晚 고기의진수<br>
+🍲 豬肉湯飯 → D3 午 일등가마솥 남포점</div>`;
   h+=`<div class="musts">`+MUSTS.map(m=>`<button class="must ${musts[m.id]?"on":""}" data-must="${m.id}">
       <span class="e">${m.e}</span><span><span class="n">${esc(m.n)}</span><span class="w">${esc(m.w)}</span></span></button>`).join("")+`</div>`;
   h+=`<div class="trophy ${MUSTS.every(m=>musts[m.id])?"":"hide"}" id="trophy">🏆 <b>四格全滿</b> — 烤肉、刀削麵、釜飯、豬肉湯飯，你這趟該吃的都吃到了。生日快樂 🎂</div>`;
@@ -885,8 +901,8 @@ function renderMap(){
   const areas=[
     ["西面 / 田浦（飯店圈・全部走得到）",["hotel","bujebi","somunan","gogi","songjeong","strut","motiver","awluk","bagel","samjung","daiso2","daiso","crrJ","avivere","musinsa","ug","lotteS","manhwa"]],
     ["廣安里 / 南川（D1 晚上）",["gwangalli","drone","handasot","crrG","haute","gongwon","nemone"]],
-    ["海雲台（D2 全天）",["skycapsule","miffy","beachtrain","daritdol","cheongsapo","doenjang","daisoM","haeridan","backroad","dongbaek","xthesky"]],
-    ["影島 / 南浦（D3 全天）",["huinnyeoul","arte","momos","gukje","daisoN","lotteG","biff"]],
+    ["海雲台（D2 全天）",["skycapsule","miffy","beachtrain","daritdol","kalguksu31","cheongsapo","doenjang","daisoM","haeridan","backroad","dongbaek","xthesky"]],
+    ["影島 / 南浦（D3 全天）",["huinnyeoul","arte","momos","gukbapN","gukje","daisoN","lotteG","biff"]],
     ["機場",["airport"]]
   ];
   const nid=Object.values(P).filter(x=>x.nid).length, tot=Object.keys(P).length;
