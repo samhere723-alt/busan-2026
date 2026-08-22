@@ -21,7 +21,7 @@
   --signal:#B23F17; --signalSoft:#FBE7DE;
   --gold:#8A6209; --goldSoft:#F6EEDA;
   --go:#17694A; --goSoft:#DFEFE7; --goOn:#FFFFFF;
-  --duskA:#FBEADB;
+  --duskA:#FBEADB; --ig:#A03D6B; --igSoft:#FAE7F0;
   --shadow:0 1px 2px rgba(16,23,28,.05),0 6px 18px rgba(16,23,28,.06);
   --r:14px;
   --fs:"IBM Plex Sans","Noto Sans TC","PingFang TC","Microsoft JhengHei",-apple-system,BlinkMacSystemFont,sans-serif;
@@ -36,7 +36,7 @@
     --signal:#F0855F; --signalSoft:#361A11;
     --gold:#D6AE5C; --goldSoft:#2F2611;
     --go:#63C89B; --goSoft:#122B20; --goOn:#08251A;
-    --duskA:#2A2030;
+    --duskA:#2A2030; --ig:#F2A0C4; --igSoft:#391B29;
     --shadow:0 1px 2px rgba(0,0,0,.45),0 6px 18px rgba(0,0,0,.32);
   }
 }
@@ -48,7 +48,7 @@
   --signal:#F0855F; --signalSoft:#361A11;
   --gold:#D6AE5C; --goldSoft:#2F2611;
   --go:#63C89B; --goSoft:#122B20; --goOn:#08251A;
-  --duskA:#2A2030;
+  --duskA:#2A2030; --ig:#F2A0C4; --igSoft:#391B29;
     --shadow:0 1px 2px rgba(0,0,0,.45),0 6px 18px rgba(0,0,0,.32);
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -159,6 +159,7 @@ main{padding:14px 14px 20px;max-width:640px;margin:0 auto}
 }
 .btn.pri{background:var(--sea);color:var(--seaOn);border-color:var(--sea)}
 .btn.book{background:var(--goldSoft);color:var(--gold);border-color:color-mix(in srgb,var(--gold) 42%,transparent);font-weight:700}
+.btn.ig{background:var(--igSoft);color:var(--ig);border-color:color-mix(in srgb,var(--ig) 40%,transparent);font-weight:700}
 .btn:active{transform:scale(.985)}
 
 /* checkbox */
@@ -453,10 +454,21 @@ const P = {
     check:"⚠️ D3 是週一 — 韓國百貨每月公休日常排週一。出發前上 lotteshopping.com 查 9 月公休日，別白跑。頂樓有免費空中花園。"},
   biff:{n:"BIFF 廣場・光復路",kr:"비프광장",addr:"부산 중구 구덕로 44",nid:"11672349",conf:"ok",area:"南浦",type:"shop",tag:"逛街",
     tip:"路邊攤：糖餅（씨앗호떡）是釜山名物。等回程時間的最佳殺時間點。"},
+  solsot:{n:"솔솥 廣安店（釜飯備案）",kr:"솔솥 광안점",addr:"부산 수영구 광남로 78 1층",conf:"ok",area:"廣安里",type:"food",tag:"釜飯",
+    hours:"每天 11:00–21:00（20:30 最後點餐）",
+    must:["관자도미솥밥 干貝鯛魚釜飯（招牌）","도미솥밥 鯛魚釜飯"],
+    tip:"한다솥 排太久時的同類型備案。就在廣安里海水浴場正前方，走路兩三分鐘，一樣是솥밥專門店。"},
+  gohasun:{n:"고하순（烤肉備案・店員代烤）",kr:"고기로 하나 되는 순간",addr:"부산 부산진구 서전로 38 2층",conf:"ok",area:"西面",type:"food",tag:"烤肉",
+    hours:"每天 11:30–24:00",
+    must:["삼겹살 五花肉","칼집껍데기 劃刀豬皮（評價最高）"],
+    tip:"<b>就在你飯店正對面</b>（飯店是 서전로 39，這家 서전로 38）。一樣是<b>店員全程代烤</b>，開到半夜 12 點。<br><br>고기의진수 要排隊或客滿時走這家，走回飯店只要一分鐘。"},
   kalguksu31:{n:"해운대31cm해물칼국수 本店（海鮮刀削麵）",kr:"해운대31cm해물칼국수 본점",addr:"부산 해운대구 좌동로91번길 10 좌동재래시장",conf:"ok",area:"海雲台",type:"food",tag:"刀削麵",
     hours:"週二–日 11:00–21:00（<b>週一公休</b>・D2 是週日照開）",price:"31cm해물칼국수 ₩7,000",
     must:["31cm해물칼국수 海鮮刀削麵 ₩7,000","홍합탕 淡菜湯 ₩8,000","물총조개탕 蛤蜊湯 ₩10,000"],
     tip:"用<b>直徑 31 公分的大碗</b>裝，滿滿淡菜、扇貝、蛤蜊配白麵，一碗才 ₩7,000。在佐洞傳統市場裡，是海雲台這一帶最有名的海鮮刀削麵。<br><br>從青沙浦搭計程車約 8 分鐘。<b>된장내음（豬肉湯飯）就在同一區</b>，兩家距離走路 10 分鐘 —— 同一趟你想吃哪種都行。"},
+  gukbap2:{n:"제일돼지국밥（豬肉湯飯備案）",kr:"제일돼지국밥",addr:"부산 중구 남포길 49",conf:"ok",area:"南浦",type:"food",tag:"豬肉湯飯",
+    hours:"每天 10:00–22:00",
+    tip:"南浦站 3 號出口走 1 分鐘。일등가마솥 排隊時的同類型備案，兩家走路約 5 分鐘。"},
   gukbapN:{n:"일등가마솥돼지국밥 南浦店（豬肉湯飯）",kr:"일등가마솥돼지국밥 남포점",addr:"부산 중구 비프광장로 5",conf:"ok",area:"南浦",type:"food",tag:"豬肉湯飯",
     hours:"24 小時（週日 21:00–週一 09:00 休・D3 中午照開）",
     must:["돼지국밥 豬肉湯飯","수육백반 白切肉定食"],
@@ -506,7 +518,9 @@ const DAYS = [
     {mv:"走路 3 分 · 這是全趟最近的一餐"},
     {t:"11:00",p:"bujebi",n:"午餐：부제비（海鮮麵疙瘩）",type:"food",key:true,
       det:"11:00 開門就到，避開排隊。注意 15:00–17:00 休息，錯過就要等晚上。",
-      alt:["송정3대국밥（24 小時，走路約 8 分）","소문난 손칼국수（田浦站 8 號出口）"]},
+      alt:["<b>備案① 소문난 손칼국수</b>（同為海鮮刀削麵・田浦站 8 號出口・월–토 10:00–21:30）—— IG 認證的另一家",
+           "<b>備案② 송정3대국밥</b>（豬肉湯飯・24 小時・서면로68번길 33）—— 清晨或深夜唯一穩的熱食"],
+      sub:["somunan","songjeong"]},
     {mv:"走路 · 西面～田浦全部走得到"},
     {t:"12:30",n:"西面・田浦逛街",type:"shop",key:true,
       det:"這段沒有硬時間，照心情走。順路順序：<br>① <b>London Bagel Museum</b>（樂天百貨西面店 B1・排隊名店）<br>② 大創 부산서면점（322 坪，09:00 就開）<br>③ 藥妝 · 올리브영 西面旗艦<br>④ CRR 田浦店（寵物用品・週六到 22:00）<br>⑤ 아비베르 Avivere 生活選物<br>⑥ MUSINSA STANDARD<br>⑦ 田浦咖啡街：<b>MOTIVER</b>（愛心法式吐司）或 <b>AWLUK 얼룩</b>（有貓、賣皮件）—— 都是 IG 那則「在地人回訪」點名的<br><br>大創晚上還會再來一次（20:40 那格），現在買不完沒關係。",
@@ -525,7 +539,9 @@ const DAYS = [
       alt:["直接坐沙灘上（免費，視野一樣好）","공원 6ongone 法棍三明治（11:00–19:00，週二休）"]},
     {mv:"走路 2 分"},
     {t:"19:00",p:"handasot",n:"晚餐：한다솥 本店（釜飯）",type:"food",key:true,star:"🎂 生日這一餐",
-      det:"生日這餐。離海邊走路 2 分，吃完直接走去看秀，時間卡得剛剛好。"},
+      det:"生日這餐。離海邊走路 2 分。營業到 21:00（20:30 最後點餐），尖峰會等，可用 CatchTable 先取號。",
+      alt:["<b>備案 솔솥 광안점</b>（同為솥밥專門店・광남로 78・11:00–21:00）—— 也在廣安里海水浴場正前方，走路兩三分鐘。招牌是干貝鯛魚釜飯。"],
+      sub:["solsot"]},
     {mv:"走回沙灘 · 2 分"},
     {t:"20:00",n:"廣安里海邊散步 → 回西面",type:"move",
       det:"沿沙灘走一段消化一下，廣安大橋這時已經點燈。<br>廣安站 → 2 號線 → 西面，約 20 分。",
@@ -552,9 +568,9 @@ const DAYS = [
     {mv:"青沙浦 → 佐洞市場 · 計程車約 8 分"},
     {t:"11:50",p:"kalguksu31",n:"午餐：해운대31cm해물칼국수",type:"food",key:true,star:"🍜 你要的海鮮刀削麵",
       det:"<b>直徑 31 公分的大碗</b>，滿滿淡菜、扇貝、蛤蜊配白麵，一碗 ₩7,000。在佐洞傳統市場裡，海雲台這一帶最有名的海鮮刀削麵。<br><br>週一公休，但 D2 是週日、照常開。",
-      alt:["<b>된장내음（大醬豬肉湯飯 ₩9,000）</b> — IG 認證，全店只賣這一種定食，就在同一區走路 10 分鐘。想改吃湯飯就走這家。",
+      alt:["<b>備案 된장내음（大醬豬肉湯飯 ₩9,000）</b> — IG 認證，全店只賣這一種定食，就在同一區走路 10 分鐘。31cm 客滿或賣完（食材常提早售罄）就走這家。",
            "青沙浦烤貝街（도희네 조개구이）— 海景配貝類，但不是你清單上的四種"],
-      sub:["doenjang","cheongsapo"]},
+      sub:["doenjang"]},
     {mv:"海邊列車 青沙浦 → 尾浦 · 沿海慢車約 15 分"},
     {t:"13:30",p:"miffy",n:"🐰 Miffy Store ＋ 海雲台海灘散步",type:"shop",key:true,star:"🐰 這段抓兩小時",
       det:"<b>海邊列車下車就到 — Miffy Store 就在尾浦站（藍線公園）正前方。</b><br><br>店是 <b>50 坪獨立門市</b>，不是百貨裡的小專櫃，慢慢挑加結帳抓 <b>45 分鐘</b>。釜山限定：札嘎其版娃娃 3 款、水手版 2 款、釜山觀光米菲、釜山鈴鑰圈，還有<b>海雲台限定電車版娃娃鑰圈</b> — 配色照著你上午搭的那台藍線列車做的，只有這家買得到。<br><br>逛完直接接沙灘：從尾浦沿海灘往西走就是海雲台海水浴場，走一段再切進後街選物店群（IN THE STREET、Luft Mansion、POTSHOP、Omyohan、Soyogi）。順路不用繞。",
@@ -569,7 +585,8 @@ const DAYS = [
     {mv:"海雲台 → 2 號線 → 西面 · 約 35 分（17:15 出發）"},
     {t:"18:00",p:"gogi",n:"晚餐：고기의진수（烤肉）",type:"food",key:true,star:"🥩 你指定改 18:00",
       det:"IG 推的交叉熟成豬肉，店員全程代烤、小菜無限，綜合盤約 ₩50,000（四人分約每人台幣三百多）。<br><br>地址已經查到了：<b>부산진구 신천대로62번길 53 1층</b>（NAVER 正式店名「고기의진수 서면점」）。這家沒有線上訂位系統，尖峰只能現場排。",
-      alt:["西面任一家 삼겹살 —— 西面烤肉店密度全釜山最高，不怕沒得吃"]},
+      alt:["<b>備案 고하순（고기로 하나 되는 순간）</b> — 부산진구 서전로 38 2층，<b>就在你飯店正對面</b>。一樣店員全程代烤，開到半夜 12 點，走回飯店一分鐘。고기의진수 客滿就走這家。"],
+      sub:["gohasun"]},
     {mv:"走路 · 삼정타워就在西面站旁"},
     {t:"19:30",p:"samjung",n:"三政大樓 삼정타워",type:"shop",key:true,
       det:"你傳連結的那家。開到 22:00，吃完晚餐還有兩個半小時。<br><br>建議動線：<b>9F POP MART ＋ 애니플러스</b> → 3F 服飾街 → 2F ABC마트 → 1F 올리브영收尾。想看電影的話 11–14F 是 CGV。",
@@ -594,7 +611,8 @@ const DAYS = [
       det:"08:00–18:00。碼頭倉庫改建、看得到海、2026 世界百大咖啡 #22。你要的「看海咖啡廳」這家等級最高。"},
     {t:"12:30",p:"gukbapN",n:"午餐：일등가마솥돼지국밥 南浦店",type:"food",key:true,star:"🍲 你要的豬肉湯飯",
       det:"就在 BIFF 廣場旁，跟等一下要去的國際市場、南浦大創走路都三分鐘內。<br><br>24 小時營業（只有週日晚上到週一早上 9 點休），D3 中午照常開。釜山豬肉湯飯的本場就在這一帶。",
-      alt:["제일돼지국밥（중구 남포길 49・10:00–22:00・南浦站 3 號出口走 1 分）"]},
+      alt:["<b>備案 제일돼지국밥</b>（同為豬肉湯飯・중구 남포길 49・每天 10:00–22:00・南浦站 3 號出口走 1 分）"],
+      sub:["gukbap2"]},
     {mv:"島內移動 · 約 10 分"},
     {mv:"過影島大橋 → 南浦 · 約 15 分"},
     {t:"13:30",p:"gukje",n:"國際市場・買棉被",type:"shop",key:true,star:"🧵 你指定提前到這格",
@@ -723,6 +741,11 @@ function copy(txt,label){
     document.body.removeChild(ta);
   }
 }
+function igOf(p){
+  const k=Object.keys(P).find(x=>P[x]===p); if(!k) return null;
+  const hit=(typeof IG!=="undefined") ? IG.find(x=>(x.p||[]).includes(k)) : null;
+  return hit ? {url:hit.u, title:hit.t} : null;
+}
 const CONF={ok:["c-ok","地址確認"],search:["c-search","搜店名"],check:["c-check","待確認"]};
 function confOf(p){ return p.nid?["c-ok","NAVER 直連"]:CONF[p.conf]; }
 
@@ -732,6 +755,7 @@ function actsHTML(p){
     <button class="btn" data-copy="${esc(p.kr||p.n)}" data-label="${esc(p.kr||p.n)}">📋 韓文店名</button>
     ${p.addr&&p.addr!==p.kr?`<button class="btn" data-copy="${esc(p.addr)}" data-label="地址">📋 地址</button>`:""}
     ${p.bookUrl?`<a class="btn book" href="${p.bookUrl}" target="_blank" rel="noopener">🎟 ${esc(p.book)}</a>`:""}
+    ${(()=>{const g=igOf(p);return g?`<a class="btn ig" href="${g.url}" target="_blank" rel="noopener">📸 IG 原片</a>`:""})()}
   </div>`;
 }
 function detailBlock(p){
@@ -924,6 +948,7 @@ function renderMap(){
           <button class="btn" data-copy="${esc(p.kr)}" data-label="${esc(p.kr)}">📋 店名</button>
           ${p.addr&&p.addr!==p.kr?`<button class="btn" data-copy="${esc(p.addr)}" data-label="地址">📋 地址</button>`:""}
           ${p.bookUrl?`<a class="btn book" href="${p.bookUrl}" target="_blank" rel="noopener">🎟 ${esc(p.book)}</a>`:""}
+          ${(()=>{const g=igOf(p);return g?`<a class="btn ig" href="${g.url}" target="_blank" rel="noopener">📸 IG</a>`:""})()}
         </div></div>`;
     });
   });
