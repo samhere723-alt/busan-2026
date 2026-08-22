@@ -584,7 +584,7 @@ const MUSTS = [
 const PREP = [
   {id:"p1",t:"線上預約天空膠囊",s:"D2 10:00 尾浦→青沙浦。週日現場票常沒了，這是唯一會整段崩掉的環節。當天搭乘前 2–3 小時就停止線上售票。",
    url:"https://www.bluelinepark.com/booking.do",ul:"官方預約頁"},
-  {id:"p2",t:"線上先辦登機 / 選位",s:"真航空 LJ752（去 9/12 02:40）· LJ751（回 9/14 22:00）。訂位代號在你的 Jin Air 訂位確認信裡（這個公開版沒放）。兩段都還沒有座位號，起飛前 48 小時可線上選位。",
+  {id:"p2",t:"線上先辦登機 / 選位",s:"真航空 LJ752（去 9/12 02:40）· LJ751（回 9/14 22:00）。兩段都還沒有座位號，起飛前 48 小時可線上選位。",
    url:"https://www.jinair.com/",ul:"Jin Air 官網"},
   {id:"p3",t:"查樂天百貨光復店 9 月公休日",s:"D3 是週一，韓國百貨公休多排週一。",
    url:"https://www.lotteshopping.com/store/main?cstrCd=0333",ul:"樂天官網 光復店"},
@@ -915,7 +915,7 @@ function renderIG(){
     .map(([k,i,l,n])=>`<button class="igchip ${igFilter===k?"on":""}" data-igf="${k}">${i} ${esc(l)} ${n}</button>`).join("")+`</div>`;
   h+=`<div class="iggrid">`+list.map(x=>`
     <button class="igcell" data-ig="${x.c}">
-      <img src="${x.img}" alt="${esc(x.t)}" loading="lazy">
+      <img src="${x.img}" alt="${esc(x.t)}" decoding="sync">
       ${x.day?`<span class="dbadge">${x.day}</span>`:`<span class="dbadge" style="background:rgba(140,60,30,.8)">未排</span>`}
       <span class="cap">${esc(x.t)}</span>
     </button>`).join("")+`</div>`;
