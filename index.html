@@ -360,6 +360,14 @@ const P = {
   strut:{n:"Strut Coffee（世界百大咖啡 #38）",kr:"스트럿 커피",addr:"부산 부산진구 동성로39번길 28",nid:"38544642",conf:"ok",area:"田浦",type:"cafe",tag:"咖啡",
     hours:"未證實",src:"IG",
     tip:"2025 年世界百大咖啡第 38 名。逛田浦逛累了在這裡坐，比連鎖好太多。"},
+  bujeon:{n:"釜田市場 부전시장（買水果）",kr:"부전마켓타운",addr:"부산 부산진구 중앙대로 717（시장 일대 중앙대로755번길）",nid:"20573602",conf:"ok",area:"西面",type:"shop",tag:"水果",
+    hours:"<b>06:00–19:00</b>（攤商各異）・每月第 1、3 個週日公休",
+    must:["복숭아 水蜜桃（9 月正當季）","포도・샤인머스캣 葡萄／麝香葡萄","배 水梨（9 月上市）","무화과 無花果"],
+    tip:"<b>釜山最大的傳統市場，就在西面旁邊 —— 離飯店走路 5～8 分鐘。</b>當地人買水果的地方，價格比超市便宜一截，種類多到「找不到的水果比找得到的難」。<br><br>9 月正好是水蜜桃尾聲、葡萄和水梨的旺季。市場裡也有蔬菜、乾貨、生鮮、寢具、衣服。",
+    check:"⚠️ <b>19:00 就收攤</b> —— D1 晚上 20:00 才從廣安里回西面，那時已經關了，所以我排在下午 14:30（16:00 進房前買好，直接放冰箱）。<br><br>⚠️ 每月第 1、3 個週日公休。9/13 是第 2 個週日，D2 早上也還開。"},
+  lotteFood:{n:"樂天百貨西面店 B1 食品館（晚上買水果）",kr:"롯데백화점 부산본점 식품관",addr:"부산 부산진구 가야대로 772 지하1층",nid:"12133966",conf:"ok",area:"西面",type:"shop",tag:"水果",
+    hours:"約 10:30–20:00（隨百貨）",
+    tip:"<b>市場關了之後的替代方案。</b>百貨地下食品館水果品質好、有禮盒裝，但明顯比부전시장貴。<br><br>好處是 <b>D2 19:00 你本來就會在這棟</b>，逛百貨順手買，同一層還有 London Bagel Museum。"},
   daiso:{n:"大創 西面地下街店（小櫃位）",kr:"다이소 서면지하상가중앙몰점",addr:"부산 부산진구 가야대로 777 중앙몰 J-17호",nid:"1352401602",conf:"ok",area:"西面",type:"shop",tag:"大創",
     hours:"10:00–22:00",
     tip:"⚠️ 這家是地下街裡的<b>小櫃位</b>（J-17 號），品項有限。要買齊請去下面那家 322 坪的<b>부산서면점</b>，走路 5 分鐘、還早一小時開。順路經過再進來補漏就好。"},
@@ -541,6 +549,11 @@ const DAYS = [
     {t:"13:30",p:"bagel",n:"London Bagel Museum（買外帶）",type:"cafe",key:true,star:"🥯 排隊名店",
       det:"樂天百貨西面店 <b>B1</b>，2026/6/27 才開的釜山首店（首爾、濟州以外第一家）。<br><br><b>怎麼排：</b>只能<b>現場排</b> —— 官方把 CatchTable 線上候位整個關掉了。百貨開門前到的人在 B1「분수광장」噴水廣場前的等待區排。<br><br><b>規則要注意：</b>每人入場後只能排隊買一次；如果內用完還想買外帶，要<b>重新排一次</b>。所以想帶走就一次買齊。<br><br><b>買什麼：</b>蔥奶油乳酪貝果三明治（쪽파 크림치즈，公認必吃）＋釜山限定的 쌀 플레인／쌀 통팥／탕종 베이글。抹醬也可以單買。",
       alt:["排爆的話：這是逛街時間不是正餐，直接跳過，晚上或 D2 再來（百貨 20:00 關）"]},
+    {t:"14:30",p:"bujeon",n:"釜田市場 부전시장・買水果",type:"shop",key:true,star:"🍑 你要的水果",
+      det:"<b>你問的「飯店附近能買水果的地方」就是這裡 —— 走路 5～8 分鐘。</b>釜山最大的傳統市場，當地人買水果的地方，價格比超市便宜一截。<br><br>9 月當季：<b>水蜜桃</b>（尾聲）、<b>葡萄／麝香葡萄</b>（旺季）、<b>水梨</b>（剛上市）、無花果。<br><br>⏰ <b>市場 19:00 收攤</b>，所以排在下午 —— 買完 16:00 進房直接放冰箱，晚上回來就有得吃。",
+      alt:["<b>晚上才想買：</b>樂天百貨西面店 B1 食品館（約到 20:00，品質好但貴）。D2 19:00 你本來就在那棟。",
+           "<b>量販店都太遠：</b>롯데마트 부산점走 20 分、트레이더스 서면점 17 分，都超過你設的 8 分鐘。"],
+      sub:["lotteFood"]},
     {t:"15:30",p:"strut",n:"Strut Coffee 歇腳",type:"cafe",
       det:"世界百大咖啡 #38。逛到這裡差不多該補一杯。"},
     {mv:"走回飯店 · 約 8 分"},
@@ -565,7 +578,8 @@ const DAYS = [
       sub:["gwangalli","nemone"]},
     {t:"20:40",p:"daiso2",n:"大創 釜山西面店（322 坪）",type:"shop",key:true,star:"🛒 今晚的主場",
       det:"<b>你要的「更大、更齊全、又順路」的那家就是這間。</b>322 坪、地下一樓整層，媒體稱釜山最大，開到 22:00 —— 你有一個半小時可以慢慢掃。<br><br>離飯店走路 5 分鐘，買到手軟也不怕，直接拎回房間。",
-      alt:["同一晚 20:00／22:00 廣安里有無人機秀（12 分鐘、免費、你人本來就站在那片沙灘上）。你說改成大創我就照改了 —— 但當下若捨不得，看完 20:00 那場再回西面，21:00 到大創仍有整整一小時。",
+      alt:["🍑 水果不在這格 —— 부전시장 19:00 收攤，已排到下午 14:30；晚上想買只剩樂天 B1 食品館（20:00 關）。",
+           "同一晚 20:00／22:00 廣安里有無人機秀（12 分鐘、免費、你人本來就站在那片沙灘上）。你說改成大創我就照改了 —— 但當下若捨不得，看完 20:00 那場再回西面，21:00 到大創仍有整整一小時。",
            "還想再逛：西面地下街（22:00）、올리브영 西面旗艦（22:30）"]}
   ]},
 
@@ -680,6 +694,7 @@ const PREP = [
   {id:"p7",t:"下載 NAVER Map ＋ Papago",s:"Google Maps 在韓國導航不準（IG 那家 공원 6ongone 就明講 Google 地址是錯的）。"},
   {id:"p8",t:"交通卡 T-money / Cashbee",s:"機場或任一超商買。地鐵、公車、海邊列車都能刷。"},
   {id:"p9",t:"入境文件自行確認",s:"K-ETA／檢疫申報規定會變，出發前上官網查最新版 — 這條我沒幫你查證。"},
+  {id:"p12",t:"新鮮水果不能帶回台灣",s:"台灣禁止旅客攜帶新鮮水果入境，違規會被裁罰。부전시장買的水果請在韓國吃完，別放進行李箱。"},
   {id:"p10",t:"確認絕影海岸散步路是否開放",s:"原公告施工到 2026 年 5 月，9 月應該通了但沒二次證實。"}
 ];
 
@@ -926,7 +941,7 @@ const WANTS=[
   "CRR 服飾","國際市場棉被","泡麵 / 零食 / 燒酒","咖啡豆（MOMOS）","伴手禮"
 ];
 function renderShop(){
-  const list=["daisoM","daiso2","daisoN","daiso","samjung","bagel","crrJ","crrG","miffy","avivere","musinsa","backroad","haeridan","ug","lotteS","lotteG","gukje","biff"];
+  const list=["bujeon","lotteFood","daisoM","daiso2","daisoN","daiso","samjung","bagel","crrJ","crrG","miffy","avivere","musinsa","backroad","haeridan","ug","lotteS","lotteG","gukje","biff"];
   let h=`<div class="banner sea"><b>先更正一件事：CRR（클러스터라운드）是寵物用品店</b>，不是服飾選物 —— NAVER 分類「반려동물용품」，賣狗貓用品＋釜山造型小物。而且<b>全釜山只有兩家</b>：田浦店、廣安店（我先前寫的南浦店不存在，已移除）。兩家 D1 都會經過。`
    +`<br><br><b>米菲兔選物店</b>就在膠囊列車尾浦站正前方，D2 早上順手就逛到。`
    +`<br><br><b>大創三家、一天碰一家，不用專程跑：</b><br>
@@ -947,7 +962,7 @@ D3 下午 <b>南浦店 地下四層</b>（BIFF 廣場隔壁）<br>
 /* ---------- 地圖 ---------- */
 function renderMap(){
   const areas=[
-    ["西面 / 田浦（飯店圈・全部走得到）",["hotel","bujebi","somunan","gogi","songjeong","handasotS","gogi","gohasun","seolyamyeok","strut","motiver","awluk","bagel","samjung","daiso2","daiso","crrJ","avivere","musinsa","ug","lotteS","manhwa"]],
+    ["西面 / 田浦（飯店圈・全部走得到）",["hotel","bujebi","somunan","gogi","songjeong","handasotS","gogi","gohasun","seolyamyeok","strut","motiver","awluk","bagel","bujeon","samjung","daiso2","daiso","crrJ","avivere","musinsa","ug","lotteS","manhwa"]],
     ["廣安里 / 南川（D1 晚上）",["gwangalli","drone","busandaek","handasot","solsot","crrG","haute","gongwon","nemone"]],
     ["海雲台（D2 全天）",["skycapsule","miffy","beachtrain","daritdol","kalguksu31","cheongsapo","doenjang","daisoM","haeridan","backroad","dongbaek","xthesky"]],
     ["影島 / 南浦（D3 全天）",["huinnyeoul","atelierO","arte","momos","gukbapN","gukje","daisoN","lotteG","biff"]],
