@@ -293,7 +293,7 @@ nav{
 
 /* ---------- 相對位置圖 ---------- */
 .mapwrap{position:relative;margin:0 -14px 4px;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
-#leafmap{height:68vh;min-height:400px;max-height:620px;width:100%;background:var(--card2);z-index:1}
+#leafmap{height:min(46vh,86vw);min-height:290px;max-height:420px;width:100%;background:var(--card2);z-index:1}
 .leaflet-container{font-family:var(--fs)}
 .leaflet-popup-content-wrapper{border-radius:12px}
 .pin{position:relative;display:flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;
@@ -315,12 +315,12 @@ nav{
 .mapctl{position:absolute;right:9px;top:9px;display:flex;flex-direction:column;gap:5px}
 .mapctl button{width:38px;height:38px;border-radius:10px;background:var(--card);border:1px solid var(--line);
   box-shadow:var(--shadow);font-size:17px;font-weight:700;display:flex;align-items:center;justify-content:center;line-height:1}
-.maplegend{display:flex;gap:5px;flex-wrap:wrap;padding:10px 0 2px}
+.maplegend{display:flex;gap:5px;flex-wrap:wrap;padding:2px 0 10px}
 .lg{display:inline-flex;align-items:center;gap:4px;font-size:11.5px;color:var(--ink2);background:var(--card2);
   border:1px solid var(--line);border-radius:99px;padding:7px 10px;font-weight:600;min-height:34px}
 .lg.on{background:var(--sea);color:var(--seaOn);border-color:var(--sea)}
 .lg i{width:9px;height:9px;border-radius:50%;display:block}
-.dayfilter{display:flex;gap:5px;padding:8px 0 12px;overflow-x:auto;scrollbar-width:none}
+.dayfilter{display:flex;gap:5px;padding:12px 0 8px;overflow-x:auto;scrollbar-width:none}
 .dayfilter::-webkit-scrollbar{display:none}
 .dfb{flex:0 0 auto;padding:7px 12px;min-height:36px;display:flex;align-items:center;gap:5px;border-radius:99px;
   background:var(--card2);border:1px solid transparent;font-size:12px;font-weight:600;color:var(--ink2);white-space:nowrap}
@@ -1022,25 +1022,27 @@ function renderMap(){
     ["機場",["airport"]]
   ];
   const nid=Object.values(P).filter(x=>x.nid).length, tot=Object.keys(P).length;
-  let h=`<div class="banner"><b>點任一個圖釘</b>就跳出那家店的完整資訊，裡面有 NAVER 導航跟 IG 原片。圖釘上的數字是第幾天。<br><br>
-    虛線是每天的行程順序：<span style="color:#C8503B;font-weight:700">D1</span>、<span style="color:#0A5A78;font-weight:700">D2</span>、<span style="color:#17694A;font-weight:700">D3</span>。<b>選單一天</b>地圖會自動框到那天的範圍。<br><br><b>下面的圖示對照表可以點</b> —— 點「🍜 刀削麵」就只留刀削麵的店，可以複選，按「🗺 全部」清掉。<br><br>
-    <span class="note">※ 地圖圖磚要連網才會顯示；離線時 App 其他部分照常可用。<br>※ 金海機場和沙下區的영진돼지국밥在市區外 20 公里，放進來會把其他點全擠在一角，所以沒放進地圖 —— 下面的清單裡照樣點得到。</span></div>`;
+  let h="";
   h+=`<div class="dayfilter">`+[["all","🗺 全部"],["0","D1 9/12"],["1","D2 9/13"],["2","D3 9/14"]]
       .map(([k,l])=>`<button class="dfb ${mapDay===k?"on":""}" data-mday="${k}">${esc(l)}</button>`).join("")+`</div>`;
-  h+=`<div class="mapwrap" id="mapwrap"><div id="leafmap"></div></div>`;
-  // 對照表＝篩選鈕，直接從資料生（以後加店也不會漏）
   const pool=Object.keys(P).filter(k=>GEO[k]&&!MAPSKIP.has(k));
-  const cnt={}; pool.forEach(k=>{const e=pinIcon(P[k]); cnt[e]=(cnt[e]||0)+1;});
-  const cats=Object.entries(cnt).sort((a,b)=>b[1]-a[1]);
+  const cnt={}; pool.forEach(k=>{const e=pinCat(P[k]); cnt[e]=(cnt[e]||0)+1;});
   h+=`<div class="maplegend">`
     +`<button class="lg ${mapCats.size?"":"on"}" data-mcat="__all">🗺 全部 ${pool.length}</button>`
-    +cats.map(([e,c])=>`<button class="lg ${mapCats.has(e)?"on":""}" data-mcat="${e}">${e} ${esc(ICONLABEL[e]||"")} ${c}</button>`).join("")
+    +CATS.filter(([e])=>cnt[e]).map(([e,l])=>`<button class="lg ${mapCats.has(e)?"on":""}" data-mcat="${e}">${e} ${esc(l)} ${cnt[e]}</button>`).join("")
     +`</div>`;
+  h+=`<div class="mapwrap" id="mapwrap"><div id="leafmap"></div></div>`;
   h+=`<div class="maphint2" id="maphint2">🔎 放大到街道層級會自動顯示店名</div>`;
-  h+=`<div class="banner"><b>全部 ${nid} / ${tot} 個地點都已對到 NAVER 的店家頁面。</b><br>
-    每顆 <span class="conf c-ok">NAVER 直連</span> 按鈕帶的是那家店的 place ID，點開直接是那一家 —— 不是丟關鍵字去搜、不會搜到別家。<br><br>
-    地址是 NAVER 官方的道路名地址，計程車司機看得懂，長按「地址」可複製。<br><br>
-    <b>別用 Google Maps</b> — 韓國的 Google 導航不準，IG 那家 공원 6ongone 甚至明講「Google 上的地址是錯的」。</div>`;
+  h+=`<details style="margin-top:10px"><summary class="note" style="cursor:pointer;font-weight:700">地圖怎麼用・兩個沒放進地圖的點</summary>
+    <div class="note" style="margin-top:8px;line-height:1.75">
+      • 點圖釘 → 跳出完整資訊，裡面有 NAVER 導航和 IG 原片<br>
+      • 圖釘右下角小數字＝第幾天；虛線是當天的行程順序<br>
+      • 分類鈕可以複選；選了分類會暫時隱藏路線（避免線連到看不見的點）<br>
+      • 圖磚需要連網；離線時 App 其他部分照常可用<br>
+      • <b>金海機場</b>和<b>영진돼지국밥</b>（沙下區）在市區外 20 公里，放進地圖會把其他點全擠在一角，所以沒放 —— 下面清單裡照樣點得到
+    </div></details>`;
+  h+=`<div class="sec"><h2>全部地點 ${tot} 個</h2></div>
+  <p class="note" style="margin:0 0 10px">每個 <span class="conf c-ok">NAVER 直連</span> 帶的是該店 place ID，點開直接是那一家。<b>別用 Google Maps</b>，韓國的 Google 導航不準。</p>`;
   areas.forEach(([t,ks])=>{
     h+=`<div class="sec"><h2>${esc(t)}</h2></div>`;
     ks.forEach(k=>{
@@ -1065,14 +1067,28 @@ function renderMap(){
 
 
 /* ---------- 相對位置圖（真實經緯度投影，不是示意圖）---------- */
+const CATS=[
+  ["🥩","烤肉",   ["烤肉"]],
+  ["🍜","麵食",   ["刀削麵","海鮮"]],
+  ["🍚","釜飯",   ["釜飯"]],
+  ["🍲","湯飯",   ["豬肉湯飯"]],
+  ["☕","咖啡・甜點",["咖啡","海景咖啡","排隊名店","輕食"]],
+  ["🛒","大創",   ["大創"]],
+  ["🛍","購物",   ["百貨","逛街","選物","衣服","CRR","米菲兔","棉被","水果"]],
+  ["📍","景點",   ["必去","必看","必玩","景點","夕陽","海邊","夜景","備案"]],
+  ["🏨","住宿・交通",["交通","休息"]]
+];
+const TAG2CAT={}; CATS.forEach(([e,l,tags])=>tags.forEach(t=>TAG2CAT[t]=e));
+const CATLABEL={}; CATS.forEach(([e,l])=>CATLABEL[e]=l);
+// 篩選用的 9 大類
+function pinCat(pl){
+  return TAG2CAT[pl.tag] || ({food:"🍜",cafe:"☕",shop:"🛍",sight:"📍",hotel:"🏨",move:"🏨"})[pl.type] || "📍";
+}
+// 地圖上的圖釘用具體圖示，比分類細，一眼看得出是哪種店
 const PINICON={"烤肉":"🥩","刀削麵":"🍜","釜飯":"🍚","豬肉湯飯":"🍲","海鮮":"🦪","水果":"🍑",
-  "咖啡":"☕","海景咖啡":"☕","排隊名店":"🥯","輕食":"🥖","夜景":"🌉",
+  "咖啡":"☕","海景咖啡":"🌊","排隊名店":"🥯","輕食":"🥖","夜景":"🌉",
   "大創":"🛒","CRR":"🐶","米菲兔":"🐰","選物":"🎁","衣服":"👕","百貨":"🏬","逛街":"🛍","棉被":"🧵",
-  "必玩":"🚡","交通":"🚃","夕陽":"🌇","海邊":"🏖","必看":"✨","必去":"📍","景點":"📍","休息":"😴","備案":"🔁"};
-const ICONLABEL={"🥩":"烤肉","🍜":"刀削麵","🍚":"釜飯","🍲":"豬肉湯飯","🦪":"海鮮","🍑":"水果",
-  "☕":"咖啡","🥯":"貝果","🥖":"輕食","🌉":"夜景","🍽":"其他餐廳",
-  "🛒":"大創","🐶":"CRR 寵物","🐰":"米菲兔","🎁":"選物","👕":"衣服","🏬":"百貨","🛍":"逛街","🧵":"棉被",
-  "🚡":"膠囊列車","🚃":"交通","🌇":"夕陽","🏖":"海邊","✨":"必看","📍":"景點","😴":"休息","🔁":"備案","🏨":"飯店"};
+  "必玩":"🚡","交通":"🚃","夕陽":"🌇","海邊":"🏖","必看":"✨","必去":"📍","景點":"📍","休息":"😴","備案":"🔭"};
 function pinIcon(pl){
   return PINICON[pl.tag] || ({food:"🍽",cafe:"☕",shop:"🛍",sight:"📍",hotel:"🏨",move:"🚃"})[pl.type] || "📍";
 }
@@ -1088,7 +1104,7 @@ function mapPlaces(){
     DAYS[i].items.forEach(it=>{ if(it.p)want.add(it.p); (it.sub||[]).forEach(x=>want.add(x)); });
     keys=keys.filter(k=>want.has(k));
   }
-  if(mapCats.size) keys=keys.filter(k=>mapCats.has(pinIcon(P[k])));
+  if(mapCats.size) keys=keys.filter(k=>mapCats.has(pinCat(P[k])));
   return keys;
 }
 function mapLatLngs(){
