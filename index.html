@@ -296,11 +296,21 @@ nav{
 #leafmap{height:68vh;min-height:400px;max-height:620px;width:100%;background:var(--card2);z-index:1}
 .leaflet-container{font-family:var(--fs)}
 .leaflet-popup-content-wrapper{border-radius:12px}
-.pin{display:flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;
-  border:2.5px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.35);font-size:12px;line-height:1}
-.pin b{color:#fff;font-size:11px;font-weight:800}
-.pinlbl{background:rgba(255,255,255,.94);border:1px solid rgba(0,0,0,.14);border-radius:6px;padding:1px 5px;
-  font-size:11px;font-weight:700;color:#16202a;white-space:nowrap;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.pin{position:relative;display:flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;
+  border:2.5px solid #fff;box-shadow:0 2px 7px rgba(0,0,0,.38);font-size:15px;line-height:1}
+.pin .d{position:absolute;right:-4px;bottom:-4px;width:15px;height:15px;border-radius:50%;background:#fff;
+  color:#16202a;font-size:9.5px;font-weight:800;display:flex;align-items:center;justify-content:center;
+  box-shadow:0 1px 3px rgba(0,0,0,.3)}
+/* 店名標籤：放大到一定程度才出現，否則 54 個名字會疊死 */
+.leaflet-tooltip.pinlbl{background:rgba(255,255,255,.95);border:1px solid rgba(0,0,0,.16);border-radius:6px;
+  padding:2px 6px;font-size:11.5px;font-weight:700;color:#16202a;white-space:nowrap;
+  box-shadow:0 1px 4px rgba(0,0,0,.22);pointer-events:none;display:none}
+.leaflet-tooltip.pinlbl:before{display:none}
+.zoomlbl .leaflet-tooltip.pinlbl{display:block}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .leaflet-tooltip.pinlbl{
+  background:rgba(23,32,38,.95);border-color:rgba(255,255,255,.18);color:#EDF2F5}}
+:root[data-theme="dark"] .leaflet-tooltip.pinlbl{background:rgba(23,32,38,.95);border-color:rgba(255,255,255,.18);color:#EDF2F5}
+.maphint2{padding:8px 0 0;font-size:11.5px;color:var(--ink3);line-height:1.6}
 .mapfail{padding:26px 16px;text-align:center;font-size:13.5px;color:var(--ink2);line-height:1.7}
 .mapctl{position:absolute;right:9px;top:9px;display:flex;flex-direction:column;gap:5px}
 .mapctl button{width:38px;height:38px;border-radius:10px;background:var(--card);border:1px solid var(--line);
@@ -1017,8 +1027,11 @@ function renderMap(){
   h+=`<div class="dayfilter">`+[["all","🗺 全部"],["0","D1 9/12"],["1","D2 9/13"],["2","D3 9/14"]]
       .map(([k,l])=>`<button class="dfb ${mapDay===k?"on":""}" data-mday="${k}">${esc(l)}</button>`).join("")+`</div>`;
   h+=`<div class="mapwrap" id="mapwrap"><div id="leafmap"></div></div>`;
-  h+=`<div class="maplegend">`+Object.entries(MAPTYPE).filter(([k])=>k!=="move")
-      .map(([k,v])=>`<span class="lg"><i style="background:${v[0]}"></i>${esc(v[1])}</span>`).join("")+`</div>`;
+  const legend=[["🥩","烤肉"],["🍜","刀削麵"],["🍚","釜飯"],["🍲","湯飯"],["☕","咖啡"],["🥯","貝果"],
+                ["🛒","大創"],["🐰","米菲兔"],["🏬","百貨"],["🛍","逛街"],["🍑","水果"],["🚡","膠囊列車"],
+                ["📍","景點"],["🏨","飯店"]];
+  h+=`<div class="maplegend">`+legend.map(([e,l])=>`<span class="lg">${e} ${esc(l)}</span>`).join("")+`</div>`;
+  h+=`<div class="maphint2" id="maphint2">🔎 放大到街道層級會自動顯示店名</div>`;
   h+=`<div class="banner"><b>全部 ${nid} / ${tot} 個地點都已對到 NAVER 的店家頁面。</b><br>
     每顆 <span class="conf c-ok">NAVER 直連</span> 按鈕帶的是那家店的 place ID，點開直接是那一家 —— 不是丟關鍵字去搜、不會搜到別家。<br><br>
     地址是 NAVER 官方的道路名地址，計程車司機看得懂，長按「地址」可複製。<br><br>
@@ -1047,6 +1060,13 @@ function renderMap(){
 
 
 /* ---------- 相對位置圖（真實經緯度投影，不是示意圖）---------- */
+const PINICON={"烤肉":"🥩","刀削麵":"🍜","釜飯":"🍚","豬肉湯飯":"🍲","海鮮":"🦪","水果":"🍑",
+  "咖啡":"☕","海景咖啡":"☕","排隊名店":"🥯","輕食":"🥖","夜景":"🌉",
+  "大創":"🛒","CRR":"🐶","米菲兔":"🐰","選物":"🎁","衣服":"👕","百貨":"🏬","逛街":"🛍","棉被":"🧵",
+  "必玩":"🚡","交通":"🚃","夕陽":"🌇","海邊":"🏖","必看":"✨","必去":"📍","景點":"📍","休息":"😴","備案":"🔁"};
+function pinIcon(pl){
+  return PINICON[pl.tag] || ({food:"🍽",cafe:"☕",shop:"🛍",sight:"📍",hotel:"🏨",move:"🚃"})[pl.type] || "📍";
+}
 const MAPTYPE={food:["#D2523C","吃"],cafe:["#8A5A2B","咖啡"],shop:["#0A6E92","買"],sight:["#2E7A52","景點"],hotel:["#7A3E8F","住"],move:["#6B7680","交通"]};
 const DAYCOL=["#C8503B","#0A5A78","#17694A"];
 const MAPSKIP=new Set(["airport","yeongjin"]);   // 離市區太遠，畫進去會把其他點全擠成一條
@@ -1096,14 +1116,22 @@ function buildMap(tries){
   pts.forEach(([lat,lng,k])=>{
     const pl=P[k], c=(MAPTYPE[pl.type]||MAPTYPE.sight)[0];
     const day=dayOf(k)||"";
-    const icon=L.divIcon({className:"",iconSize:[26,26],iconAnchor:[13,13],
-      html:`<div class="pin" style="background:${c}" title="${esc(pl.n)}"><b>${day.replace("D","")||"•"}</b></div>`});
-    L.marker([lat,lng],{icon,title:pl.n}).addTo(LMAP).on("click",()=>openPlace(k));
+    const badge = (mapDay==="all" && day) ? `<span class="d">${day.replace("D","")}</span>` : "";
+    const icon=L.divIcon({className:"",iconSize:[30,30],iconAnchor:[15,15],
+      html:`<div class="pin" style="background:${c}" title="${esc(pl.n)}">${pinIcon(pl)}${badge}</div>`});
+    const mk=L.marker([lat,lng],{icon,title:pl.n}).addTo(LMAP).on("click",()=>openPlace(k));
+    mk.bindTooltip(pl.n.split("（")[0].slice(0,12),
+      {permanent:true,direction:"right",offset:[17,0],className:"pinlbl",opacity:1});
   });
   window.LMAP=LMAP;
   const bounds = pts.length ? L.latLngBounds(pts.map(a=>[a[0],a[1]])) : null;
   LMAP._fitBounds = bounds;
-  const fit=()=>{ LMAP.invalidateSize(); if(bounds) LMAP.fitBounds(bounds,{padding:[36,36],maxZoom:15}); };
+  const syncLbl=()=>{ const on=LMAP.getZoom()>=14;
+    LMAP.getContainer().classList.toggle("zoomlbl",on);
+    const h=$("#maphint2"); if(h) h.textContent = on ? "🔎 放大中：圖釘旁顯示店名" : "🔎 放大到街道層級會自動顯示店名";
+  };
+  LMAP.on("zoomend",syncLbl);
+  const fit=()=>{ LMAP.invalidateSize(); if(bounds) LMAP.fitBounds(bounds,{padding:[36,36],maxZoom:15}); syncLbl(); };
   fit(); setTimeout(fit,120); setTimeout(fit,450);
 }
 function openPlace(k){
