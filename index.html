@@ -9,6 +9,8 @@
 <title>釜山生日遊 · 口袋行程</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" defer></script>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎂</text></svg>">
 <style>
@@ -290,8 +292,16 @@ nav{
 
 
 /* ---------- 相對位置圖 ---------- */
-.mapwrap{position:relative;margin:0 -14px 4px;background:var(--card);border-top:1px solid var(--line);border-bottom:1px solid var(--line);overflow:hidden;touch-action:none}
-.mapwrap svg{display:block;width:100%;height:auto;background:var(--card2)}
+.mapwrap{position:relative;margin:0 -14px 4px;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+#leafmap{height:68vh;min-height:400px;max-height:620px;width:100%;background:var(--card2);z-index:1}
+.leaflet-container{font-family:var(--fs)}
+.leaflet-popup-content-wrapper{border-radius:12px}
+.pin{display:flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;
+  border:2.5px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.35);font-size:12px;line-height:1}
+.pin b{color:#fff;font-size:11px;font-weight:800}
+.pinlbl{background:rgba(255,255,255,.94);border:1px solid rgba(0,0,0,.14);border-radius:6px;padding:1px 5px;
+  font-size:11px;font-weight:700;color:#16202a;white-space:nowrap;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.mapfail{padding:26px 16px;text-align:center;font-size:13.5px;color:var(--ink2);line-height:1.7}
 .mapctl{position:absolute;right:9px;top:9px;display:flex;flex-direction:column;gap:5px}
 .mapctl button{width:38px;height:38px;border-radius:10px;background:var(--card);border:1px solid var(--line);
   box-shadow:var(--shadow);font-size:17px;font-weight:700;display:flex;align-items:center;justify-content:center;line-height:1}
@@ -1001,16 +1011,12 @@ function renderMap(){
     ["機場",["airport"]]
   ];
   const nid=Object.values(P).filter(x=>x.nid).length, tot=Object.keys(P).length;
-  let h=`<div class="banner"><b>下面這張是真實相對位置圖</b>（用每家店的實際經緯度畫的，不是示意圖）。<br>
-    <b>點任一個點</b>就跳出那家店的完整資訊，裡面有 NAVER 導航跟 IG 原片。雙指縮放、單指拖曳。<br><br>
-    虛線是每天的行程順序：<span style="color:#C8503B;font-weight:700">D1</span>、<span style="color:#0A5A78;font-weight:700">D2</span>、<span style="color:#17694A;font-weight:700">D3</span>。<b>選單一天會放大到那天的範圍</b>，看起來清楚很多。<br><br>
-    <span class="note">※ 金海機場和沙下區的영진돼지국밥離市區太遠（20 公里外），畫進去會把其他點全擠成一條線，所以沒放進圖裡 —— 它們在下面的清單裡照樣點得到。</span></div>`;
+  let h=`<div class="banner"><b>點任一個圖釘</b>就跳出那家店的完整資訊，裡面有 NAVER 導航跟 IG 原片。圖釘上的數字是第幾天。<br><br>
+    虛線是每天的行程順序：<span style="color:#C8503B;font-weight:700">D1</span>、<span style="color:#0A5A78;font-weight:700">D2</span>、<span style="color:#17694A;font-weight:700">D3</span>。<b>選單一天</b>地圖會自動框到那天的範圍。<br><br>
+    <span class="note">※ 地圖圖磚要連網才會顯示；離線時 App 其他部分照常可用。<br>※ 金海機場和沙下區的영진돼지국밥在市區外 20 公里，放進來會把其他點全擠在一角，所以沒放進地圖 —— 下面的清單裡照樣點得到。</span></div>`;
   h+=`<div class="dayfilter">`+[["all","🗺 全部"],["0","D1 9/12"],["1","D2 9/13"],["2","D3 9/14"]]
       .map(([k,l])=>`<button class="dfb ${mapDay===k?"on":""}" data-mday="${k}">${esc(l)}</button>`).join("")+`</div>`;
-  h+=`<div class="mapwrap" id="mapwrap">${renderMapSVG()}
-      <div class="maphint" id="maphint">放大看店名 →</div>
-      <div class="mapctl"><button data-mzoom="1.6" aria-label="放大">＋</button><button data-mzoom="0.625" aria-label="縮小">－</button><button data-mzoom="reset" aria-label="回到全圖" style="font-size:13px">⤢</button></div>
-    </div>`;
+  h+=`<div class="mapwrap" id="mapwrap"><div id="leafmap"></div></div>`;
   h+=`<div class="maplegend">`+Object.entries(MAPTYPE).filter(([k])=>k!=="move")
       .map(([k,v])=>`<span class="lg"><i style="background:${v[0]}"></i>${esc(v[1])}</span>`).join("")+`</div>`;
   h+=`<div class="banner"><b>全部 ${nid} / ${tot} 個地點都已對到 NAVER 的店家頁面。</b><br>
@@ -1036,7 +1042,7 @@ function renderMap(){
     });
   });
   $("#v-map").innerHTML=h;
-  bindMapPan();
+  if(cur==="map") buildMap(0);
 }
 
 
@@ -1053,97 +1059,52 @@ function mapPlaces(){
   DAYS[i].items.forEach(it=>{ if(it.p)want.add(it.p); (it.sub||[]).forEach(x=>want.add(x)); });
   return keys.filter(k=>want.has(k));
 }
-function renderMapSVG(){
-  const keys=mapPlaces(); if(!keys.length) return "";
-  const lat=keys.map(k=>GEO[k].y);
-  const y0=(Math.min(...lat)+Math.max(...lat))/2, kx=Math.cos(y0*Math.PI/180);
-  const X=k=>GEO[k].x*kx, Y=k=>-GEO[k].y;
-  const xs=keys.map(X), ys=keys.map(Y);
-  let minx=Math.min(...xs),maxx=Math.max(...xs),miny=Math.min(...ys),maxy=Math.max(...ys);
-  const w=(maxx-minx)||0.002, h=(maxy-miny)||0.002, pad=0.16;
-  minx-=w*pad; maxx+=w*pad; miny-=h*pad; maxy+=h*pad;
-  const W=1000, H=Math.max(620,Math.min(1600,Math.round(W*((maxy-miny)/(maxx-minx)))));
-  const px=v=>(v-minx)/(maxx-minx)*W, py=v=>(v-miny)/(maxy-miny)*H;
-  const spanKm=(maxx-minx)/kx*111.32*kx;
-  const targetKm=[10,5,2,1,0.5,0.2].find(v=>v<spanKm*0.42)||0.2;
-  const barPx=targetKm/spanKm*W;
-  let routes="";
+function mapLatLngs(){
+  return mapPlaces().map(k=>[GEO[k].y, GEO[k].x, k]);
+}
+let LMAP=null;
+let _mapThemeWatch=false;
+function watchMapTheme(){
+  if(_mapThemeWatch) return; _mapThemeWatch=true;
+  try{ matchMedia("(prefers-color-scheme:dark)").addEventListener("change",()=>{ if(cur==="map") buildMap(); }); }catch(_){}
+}
+function buildMap(tries){
+  watchMapTheme();
+  const el=$("#leafmap"); if(!el) return;
+  if(typeof L==="undefined"){
+    tries=(tries||0)+1;
+    if(tries<40){ setTimeout(()=>buildMap(tries),250); return; }   // 等 defer 的 leaflet.js 就位
+    el.outerHTML='<div class="mapfail">🗺️ 地圖圖磚載不進來（可能沒網路）。<br>連上網重新整理就會出現 —— App 其他部分離線照樣能用。</div>';
+    return;
+  }
+  if(!el.clientHeight){ setTimeout(()=>buildMap(0),120); return; }  // 分頁還隱藏著，等它顯示
+  if(LMAP){LMAP.remove();LMAP=null;window.LMAP=null;}
+  const dark = matchMedia("(prefers-color-scheme:dark)").matches && document.documentElement.dataset.theme!=="light"
+               || document.documentElement.dataset.theme==="dark";
+  LMAP=L.map(el,{zoomControl:true,attributionControl:true,scrollWheelZoom:false,tap:true});
+  L.tileLayer(`https://{s}.basemaps.cartocdn.com/${dark?"dark_all":"light_all"}/{z}/{x}/{y}{r}.png`,
+    {maxZoom:19,subdomains:"abcd",
+     attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>'}).addTo(LMAP);
+  // 每天的路線
   const dayIdx = mapDay==="all"?[0,1,2]:[+mapDay];
   dayIdx.forEach(di=>{
-    const seq=DAYS[di].items.filter(it=>it.p&&GEO[it.p]).map(it=>it.p);
-    if(seq.length<2) return;
-    const d=seq.map((k,i)=>(i?"L":"M")+px(X(k)).toFixed(1)+" "+py(Y(k)).toFixed(1)).join(" ");
-    const dash = mapDay==="all" ? ' stroke-dasharray="9 7"' : "";
-    routes+='<path class="mroute" d="'+d+'" stroke="'+DAYCOL[di]+'" stroke-width="'+(mapDay==="all"?3:4)+'"'+dash+'/>';
+    const pts=DAYS[di].items.filter(it=>it.p&&GEO[it.p]&&!MAPSKIP.has(it.p)).map(it=>[GEO[it.p].y,GEO[it.p].x]);
+    if(pts.length>1) L.polyline(pts,{color:DAYCOL[di],weight:4,opacity:.65,dashArray:"10 8"}).addTo(LMAP);
   });
-  const areas={};
-  keys.forEach(k=>{const a=P[k].area||"";(areas[a]=areas[a]||[]).push(k);});
-  let alab="";
-  Object.entries(areas).forEach(([a,ks])=>{
-    if(!a||ks.length<2) return;
-    const cx=ks.reduce((t,k)=>t+px(X(k)),0)/ks.length;
-    const cy=Math.min(...ks.map(k=>py(Y(k))))-18;
-    alab+='<text class="marea" x="'+cx.toFixed(0)+'" y="'+cy.toFixed(0)+'" text-anchor="middle" fill="var(--ink3)">'+esc(a)+'</text>';
-  });
-  const nodes=keys.map(k=>{
+  // 圖釘
+  const pts=mapLatLngs();
+  pts.forEach(([lat,lng,k])=>{
     const pl=P[k], c=(MAPTYPE[pl.type]||MAPTYPE.sight)[0];
-    const x=px(X(k)).toFixed(1), y=py(Y(k)).toFixed(1);
-    const nm=pl.n.split("（")[0].replace(/^[^一-鿿A-Za-z0-9가-힯]+/,"").slice(0,9);
-    return '<g class="mnode" data-mp="'+k+'">'
-      +'<circle cx="'+x+'" cy="'+y+'" r="17" class="hit"></circle>'
-      +'<circle cx="'+x+'" cy="'+y+'" r="6.5" fill="'+c+'" stroke="var(--card)" stroke-width="2"></circle>'
-      +'<text x="'+x+'" y="'+(+y-11).toFixed(1)+'" text-anchor="middle" fill="var(--ink)" stroke="var(--card)">'+esc(nm)+'</text>'
-      +'</g>';}).join("");
-  return '<svg viewBox="0 0 '+W+' '+H+'" id="mapsvg" role="img" aria-label="所有地點的相對位置圖">'
-    +'<g id="mapg" transform="translate('+mapT.x+' '+mapT.y+') scale('+mapT.k+')">'+routes+alab+nodes+'</g>'
-    +'<g transform="translate(18 '+(H-18)+')">'
-      +'<line x1="0" y1="0" x2="'+barPx.toFixed(0)+'" y2="0" stroke="var(--ink2)" stroke-width="3"/>'
-      +'<line x1="0" y1="-5" x2="0" y2="5" stroke="var(--ink2)" stroke-width="3"/>'
-      +'<line x1="'+barPx.toFixed(0)+'" y1="-5" x2="'+barPx.toFixed(0)+'" y2="5" stroke="var(--ink2)" stroke-width="3"/>'
-      +'<text x="'+(barPx/2).toFixed(0)+'" y="-10" text-anchor="middle" font-size="13" font-weight="700" fill="var(--ink2)">'+(targetKm<1?(targetKm*1000)+" m":targetKm+" km")+'</text>'
-    +'</g>'
-    +'<g transform="translate('+(W-30)+' 34)">'
-      +'<path d="M0 -16 L6 6 L0 1 L-6 6 Z" fill="var(--ink2)"/>'
-      +'<text x="0" y="20" text-anchor="middle" font-size="12" font-weight="700" fill="var(--ink2)">N</text>'
-    +'</g></svg>';
-}
-function mapApply(){
-  const g=$("#mapg");
-  if(g){ g.setAttribute("transform","translate("+mapT.x+" "+mapT.y+") scale("+mapT.k+")");
-         g.classList.toggle("zoomed", mapT.k>1.5); }
-  const hint=$("#maphint"); if(hint) hint.textContent = mapT.k>1.5 ? "拖曳移動" : "放大看店名 →";
-}
-function mapZoom(f){
-  const sv=$("#mapsvg"); if(!sv) return;
-  const vb=sv.viewBox.baseVal, cx=vb.width/2, cy=vb.height/2;
-  const k2=Math.min(6,Math.max(1,mapT.k*f));
-  mapT.x=cx-(cx-mapT.x)*(k2/mapT.k); mapT.y=cy-(cy-mapT.y)*(k2/mapT.k); mapT.k=k2;
-  if(mapT.k<=1.001){mapT.k=1;mapT.x=0;mapT.y=0;} mapApply();
-}
-function bindMapPan(){
-  const wrap=$("#mapwrap"); if(!wrap||wrap._bound) return; wrap._bound=1;
-  const pts=new Map(); let last=null,lastD=0,moved=0;
-  const svp=e=>{const sv=$("#mapsvg");if(!sv)return{x:0,y:0};
-    const r=sv.getBoundingClientRect(),vb=sv.viewBox.baseVal;
-    return {x:(e.clientX-r.left)/r.width*vb.width,y:(e.clientY-r.top)/r.height*vb.height};};
-  wrap.addEventListener("pointerdown",e=>{try{wrap.setPointerCapture(e.pointerId);}catch(_){}
-    pts.set(e.pointerId,svp(e)); if(pts.size===1){last=svp(e);moved=0;}});
-  wrap.addEventListener("pointermove",e=>{
-    if(!pts.has(e.pointerId))return; pts.set(e.pointerId,svp(e));
-    const a=[...pts.values()];
-    if(a.length>=2){
-      const d=Math.hypot(a[0].x-a[1].x,a[0].y-a[1].y);
-      if(lastD){const mx=(a[0].x+a[1].x)/2,my=(a[0].y+a[1].y)/2;
-        const k2=Math.min(6,Math.max(1,mapT.k*(d/lastD)));
-        mapT.x=mx-(mx-mapT.x)*(k2/mapT.k); mapT.y=my-(my-mapT.y)*(k2/mapT.k); mapT.k=k2; mapApply();}
-      lastD=d; moved=99; return;
-    }
-    if(last){const c=svp(e);mapT.x+=c.x-last.x;mapT.y+=c.y-last.y;
-      moved+=Math.abs(c.x-last.x)+Math.abs(c.y-last.y);last=c;mapApply();}
+    const day=dayOf(k)||"";
+    const icon=L.divIcon({className:"",iconSize:[26,26],iconAnchor:[13,13],
+      html:`<div class="pin" style="background:${c}" title="${esc(pl.n)}"><b>${day.replace("D","")||"•"}</b></div>`});
+    L.marker([lat,lng],{icon,title:pl.n}).addTo(LMAP).on("click",()=>openPlace(k));
   });
-  const up=e=>{pts.delete(e.pointerId); if(pts.size<2)lastD=0;
-    if(!pts.size){wrap._moved=moved;last=null;}};
-  wrap.addEventListener("pointerup",up); wrap.addEventListener("pointercancel",up);
+  window.LMAP=LMAP;
+  const bounds = pts.length ? L.latLngBounds(pts.map(a=>[a[0],a[1]])) : null;
+  LMAP._fitBounds = bounds;
+  const fit=()=>{ LMAP.invalidateSize(); if(bounds) LMAP.fitBounds(bounds,{padding:[36,36],maxZoom:15}); };
+  fit(); setTimeout(fit,120); setTimeout(fit,450);
 }
 function openPlace(k){
   const pl=P[k]; if(!pl) return;
@@ -1297,6 +1258,9 @@ function renderNav(){
 function go(tab){
   cur=tab; renderNav();
   if(tab==="plan"){ renderDaybar(); planMode==="prep"?renderPrep():renderPlan(); }
+  if(tab==="map"){ setTimeout(()=>{
+      if(window.LMAP){ LMAP.invalidateSize(); if(LMAP._fitBounds) LMAP.fitBounds(LMAP._fitBounds,{padding:[36,36],maxZoom:15}); }
+      else buildMap(0); },60); }
   TABS.forEach(([k])=>$("#v-"+k).classList.toggle("hide",k!==tab));
   $("#daybar").classList.toggle("hide",tab!=="plan");
   const sub=$("#hsub");
@@ -1314,12 +1278,10 @@ document.addEventListener("click",e=>{
   if(t.closest("[data-close]")){closeSheet();return}
   const igf=t.closest("[data-igf]");        if(igf){igFilter=igf.dataset.igf;renderIG();window.scrollTo({top:0,behavior:"instant"});return}
   const igc=t.closest("[data-ig]");         if(igc){openSheet(igc.dataset.ig);return}
-  const mz=t.closest("[data-mzoom]");
-  if(mz){const v=mz.dataset.mzoom; if(v==="reset"){mapT={k:1,x:0,y:0};mapApply();} else mapZoom(+v); return}
   const md=t.closest("[data-mday]");
-  if(md){mapDay=md.dataset.mday; mapT={k:1,x:0,y:0}; renderMap(); window.scrollTo({top:0,behavior:"instant"}); return}
+  if(md){mapDay=md.dataset.mday; renderMap(); window.scrollTo({top:0,behavior:"instant"}); return}
   const mp=t.closest("[data-mp]");
-  if(mp){const w=$("#mapwrap"); if(w&&w._moved>6){w._moved=0;return;} openPlace(mp.dataset.mp); return}
+  if(mp){openPlace(mp.dataset.mp); return}
   const gd=t.closest("[data-goday]");
   if(gd){const i=DAYS.findIndex(d=>d.label.startsWith(gd.dataset.goday));
     closeSheet(); if(i>=0){planMode="day";curDay=i;} go("plan"); return}
