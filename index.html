@@ -288,6 +288,33 @@ nav{
 .how{margin:4px 0 0;padding-left:19px}
 .how li{margin:3px 0}
 
+
+/* ---------- 相對位置圖 ---------- */
+.mapwrap{position:relative;margin:0 -14px 4px;background:var(--card);border-top:1px solid var(--line);border-bottom:1px solid var(--line);overflow:hidden;touch-action:none}
+.mapwrap svg{display:block;width:100%;height:auto;background:var(--card2)}
+.mapctl{position:absolute;right:9px;top:9px;display:flex;flex-direction:column;gap:5px}
+.mapctl button{width:38px;height:38px;border-radius:10px;background:var(--card);border:1px solid var(--line);
+  box-shadow:var(--shadow);font-size:17px;font-weight:700;display:flex;align-items:center;justify-content:center;line-height:1}
+.maplegend{display:flex;gap:5px;flex-wrap:wrap;padding:10px 0 2px}
+.lg{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;color:var(--ink2);background:var(--card2);
+  border:1px solid var(--line);border-radius:99px;padding:4px 9px;font-weight:600}
+.lg i{width:9px;height:9px;border-radius:50%;display:block}
+.dayfilter{display:flex;gap:5px;padding:8px 0 12px;overflow-x:auto;scrollbar-width:none}
+.dayfilter::-webkit-scrollbar{display:none}
+.dfb{flex:0 0 auto;padding:7px 12px;min-height:36px;display:flex;align-items:center;gap:5px;border-radius:99px;
+  background:var(--card2);border:1px solid transparent;font-size:12px;font-weight:600;color:var(--ink2);white-space:nowrap}
+.dfb.on{background:var(--sea);color:var(--seaOn);border-color:var(--sea)}
+.mnode{cursor:pointer}
+.mnode circle.hit{fill:transparent}
+.mnode text{font-size:9px;font-weight:600;paint-order:stroke;stroke-width:2.8px;stroke-linejoin:round;
+  opacity:0;transition:opacity .15s;pointer-events:none}
+#mapg.zoomed .mnode text{opacity:1}
+.maphint{position:absolute;left:10px;top:10px;background:color-mix(in srgb,var(--card) 88%,transparent);
+  border:1px solid var(--line);border-radius:9px;padding:5px 9px;font-size:11px;font-weight:600;color:var(--ink2);
+  backdrop-filter:blur(6px);pointer-events:none}
+.marea{font-size:12px;font-weight:700;letter-spacing:1px;opacity:.55}
+.mroute{fill:none;stroke-linecap:round;stroke-linejoin:round;opacity:.5}
+
 :focus-visible{outline:2.5px solid var(--sea);outline-offset:2px;border-radius:6px}
 @media (prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
 footer{text-align:center;font-size:11.5px;color:var(--ink3);padding:26px 14px 8px;line-height:1.7}
@@ -519,6 +546,9 @@ const P = {
     check:"⚠️ 在沙下區，離你三天路線都遠（西面過去約 40 分鐘、要轉車）。除非特地安排，不然用 송정3대국밥（西面）或 된장내음（海雲台）代替。"},
   airport:{n:"金海機場 國際線航廈",kr:"김해국제공항 국제선청사",addr:"부산 강서구 공항진입로 108 국제선청사",nid:"34301761",conf:"ok",area:"機場",type:"sight",tag:"交通"}
 };
+
+/* ---- 每個地點的經緯度（抓自 NAVER，用來畫相對位置圖）---- */
+const GEO={"hotel":{"x":129.0641535,"y":35.1579538},"bujebi":{"x":129.0641022,"y":35.1558411},"somunan":{"x":129.0660229,"y":35.1543174},"gogi":{"x":129.0583195,"y":35.1531991},"songjeong":{"x":129.0584661,"y":35.1555939},"strut":{"x":129.0668328,"y":35.1541101},"bujeon":{"x":129.0610936,"y":35.1628153},"lotteFood":{"x":129.0564313,"y":35.1568254},"daiso":{"x":129.0549194,"y":35.1576526},"daiso2":{"x":129.0614131,"y":35.155539},"crrJ":{"x":129.0643129,"y":35.1554568},"avivere":{"x":129.0625252,"y":35.1546022},"musinsa":{"x":129.0594424,"y":35.154604},"ug":{"x":129.0591319,"y":35.1557794},"lotteS":{"x":129.0564313,"y":35.1568254},"manhwa":{"x":129.065723,"y":35.1535798},"busandaek":{"x":129.1152966,"y":35.1505048},"handasot":{"x":129.116869,"y":35.1524891},"crrG":{"x":129.1177592,"y":35.1551835},"haute":{"x":129.1176048,"y":35.1527816},"gongwon":{"x":129.1155704,"y":35.1585547},"nemone":{"x":129.1170044,"y":35.1521233},"gwangalli":{"x":129.1201409,"y":35.154121},"skycapsule":{"x":129.1728559,"y":35.158138},"miffy":{"x":129.1704795,"y":35.1594654},"beachtrain":{"x":129.1914108,"y":35.1612408},"daritdol":{"x":129.196248,"y":35.1642064},"cheongsapo":{"x":129.1943362,"y":35.1624957},"doenjang":{"x":129.1713411,"y":35.1673793},"haeridan":{"x":129.1574734,"y":35.1649765},"backroad":{"x":129.1577735,"y":35.1645058},"dongbaek":{"x":129.1513416,"y":35.1523659},"xthesky":{"x":129.1697687,"y":35.1599502},"huinnyeoul":{"x":129.0434588,"y":35.0798603},"arte":{"x":129.0758503,"y":35.0865369},"momos":{"x":129.0426052,"y":35.0962617},"gukje":{"x":129.0280715,"y":35.1011289},"lotteG":{"x":129.0367313,"y":35.0983483},"biff":{"x":129.029021,"y":35.098723},"handasotS":{"x":129.0601556,"y":35.1516913},"seolyamyeok":{"x":129.0627816,"y":35.1579686},"kalguksu31":{"x":129.1747503,"y":35.172914},"gukbap2":{"x":129.0339754,"y":35.0980011},"gukbapN":{"x":129.0258562,"y":35.0983566},"atelierO":{"x":129.0445681,"y":35.0793607},"motiver":{"x":129.0660314,"y":35.1574591},"awluk":{"x":129.0681178,"y":35.1553488},"samjung":{"x":129.0595621,"y":35.1530196},"daisoM":{"x":129.143162,"y":35.1564771},"daisoN":{"x":129.0309156,"y":35.098439},"yeongjin":{"x":128.9578861,"y":35.0966461},"airport":{"x":128.9468036,"y":35.1726524},"solsot":{"x":129.1137149,"y":35.1489963},"gohasun":{"x":129.0639131,"y":35.1575251},"drone":{"x":129.1201409,"y":35.154121},"bagel":{"x":129.0564313,"y":35.1568254}};
 
 /* ---- 三天行程 ---- */
 const DAYS = [
@@ -971,7 +1001,19 @@ function renderMap(){
     ["機場",["airport"]]
   ];
   const nid=Object.values(P).filter(x=>x.nid).length, tot=Object.keys(P).length;
-  let h=`<div class="banner"><b>全部 ${nid} / ${tot} 個地點都已對到 NAVER 的店家頁面。</b><br>
+  let h=`<div class="banner"><b>下面這張是真實相對位置圖</b>（用每家店的實際經緯度畫的，不是示意圖）。<br>
+    <b>點任一個點</b>就跳出那家店的完整資訊，裡面有 NAVER 導航跟 IG 原片。雙指縮放、單指拖曳。<br><br>
+    虛線是每天的行程順序：<span style="color:#C8503B;font-weight:700">D1</span>、<span style="color:#0A5A78;font-weight:700">D2</span>、<span style="color:#17694A;font-weight:700">D3</span>。<b>選單一天會放大到那天的範圍</b>，看起來清楚很多。<br><br>
+    <span class="note">※ 金海機場和沙下區的영진돼지국밥離市區太遠（20 公里外），畫進去會把其他點全擠成一條線，所以沒放進圖裡 —— 它們在下面的清單裡照樣點得到。</span></div>`;
+  h+=`<div class="dayfilter">`+[["all","🗺 全部"],["0","D1 9/12"],["1","D2 9/13"],["2","D3 9/14"]]
+      .map(([k,l])=>`<button class="dfb ${mapDay===k?"on":""}" data-mday="${k}">${esc(l)}</button>`).join("")+`</div>`;
+  h+=`<div class="mapwrap" id="mapwrap">${renderMapSVG()}
+      <div class="maphint" id="maphint">放大看店名 →</div>
+      <div class="mapctl"><button data-mzoom="1.6" aria-label="放大">＋</button><button data-mzoom="0.625" aria-label="縮小">－</button><button data-mzoom="reset" aria-label="回到全圖" style="font-size:13px">⤢</button></div>
+    </div>`;
+  h+=`<div class="maplegend">`+Object.entries(MAPTYPE).filter(([k])=>k!=="move")
+      .map(([k,v])=>`<span class="lg"><i style="background:${v[0]}"></i>${esc(v[1])}</span>`).join("")+`</div>`;
+  h+=`<div class="banner"><b>全部 ${nid} / ${tot} 個地點都已對到 NAVER 的店家頁面。</b><br>
     每顆 <span class="conf c-ok">NAVER 直連</span> 按鈕帶的是那家店的 place ID，點開直接是那一家 —— 不是丟關鍵字去搜、不會搜到別家。<br><br>
     地址是 NAVER 官方的道路名地址，計程車司機看得懂，長按「地址」可複製。<br><br>
     <b>別用 Google Maps</b> — 韓國的 Google 導航不準，IG 那家 공원 6ongone 甚至明講「Google 上的地址是錯的」。</div>`;
@@ -986,7 +1028,7 @@ function renderMap(){
         </div><span class="conf ${cf[0]}">${cf[1]}</span></div>
         <div class="acts" style="margin-top:9px">
           <a class="btn pri" href="${naverURL(p)}" target="_blank" rel="noopener">🗺 NAVER</a>
-          <button class="btn" data-copy="${esc(p.kr)}" data-label="${esc(p.kr)}">📋 店名</button>
+          <button class="btn" data-mp="${k}">ℹ️ 詳細</button>
           ${p.addr&&p.addr!==p.kr?`<button class="btn" data-copy="${esc(p.addr)}" data-label="地址">📋 地址</button>`:""}
           ${p.bookUrl?`<a class="btn book" href="${p.bookUrl}" target="_blank" rel="noopener">🎟 ${esc(p.book)}</a>`:""}
           ${(()=>{const g=igOf(p);return g?`<a class="btn ig" href="${g.url}" target="_blank" rel="noopener">📸 IG</a>`:""})()}
@@ -994,6 +1036,129 @@ function renderMap(){
     });
   });
   $("#v-map").innerHTML=h;
+  bindMapPan();
+}
+
+
+/* ---------- 相對位置圖（真實經緯度投影，不是示意圖）---------- */
+const MAPTYPE={food:["#D2523C","吃"],cafe:["#8A5A2B","咖啡"],shop:["#0A6E92","買"],sight:["#2E7A52","景點"],hotel:["#7A3E8F","住"],move:["#6B7680","交通"]};
+const DAYCOL=["#C8503B","#0A5A78","#17694A"];
+const MAPSKIP=new Set(["airport","yeongjin"]);   // 離市區太遠，畫進去會把其他點全擠成一條
+let mapDay="all", mapT={k:1,x:0,y:0};
+
+function mapPlaces(){
+  const keys=Object.keys(P).filter(k=>GEO[k]&&!MAPSKIP.has(k));
+  if(mapDay==="all") return keys;
+  const i=+mapDay, want=new Set();
+  DAYS[i].items.forEach(it=>{ if(it.p)want.add(it.p); (it.sub||[]).forEach(x=>want.add(x)); });
+  return keys.filter(k=>want.has(k));
+}
+function renderMapSVG(){
+  const keys=mapPlaces(); if(!keys.length) return "";
+  const lat=keys.map(k=>GEO[k].y);
+  const y0=(Math.min(...lat)+Math.max(...lat))/2, kx=Math.cos(y0*Math.PI/180);
+  const X=k=>GEO[k].x*kx, Y=k=>-GEO[k].y;
+  const xs=keys.map(X), ys=keys.map(Y);
+  let minx=Math.min(...xs),maxx=Math.max(...xs),miny=Math.min(...ys),maxy=Math.max(...ys);
+  const w=(maxx-minx)||0.002, h=(maxy-miny)||0.002, pad=0.16;
+  minx-=w*pad; maxx+=w*pad; miny-=h*pad; maxy+=h*pad;
+  const W=1000, H=Math.max(620,Math.min(1600,Math.round(W*((maxy-miny)/(maxx-minx)))));
+  const px=v=>(v-minx)/(maxx-minx)*W, py=v=>(v-miny)/(maxy-miny)*H;
+  const spanKm=(maxx-minx)/kx*111.32*kx;
+  const targetKm=[10,5,2,1,0.5,0.2].find(v=>v<spanKm*0.42)||0.2;
+  const barPx=targetKm/spanKm*W;
+  let routes="";
+  const dayIdx = mapDay==="all"?[0,1,2]:[+mapDay];
+  dayIdx.forEach(di=>{
+    const seq=DAYS[di].items.filter(it=>it.p&&GEO[it.p]).map(it=>it.p);
+    if(seq.length<2) return;
+    const d=seq.map((k,i)=>(i?"L":"M")+px(X(k)).toFixed(1)+" "+py(Y(k)).toFixed(1)).join(" ");
+    const dash = mapDay==="all" ? ' stroke-dasharray="9 7"' : "";
+    routes+='<path class="mroute" d="'+d+'" stroke="'+DAYCOL[di]+'" stroke-width="'+(mapDay==="all"?3:4)+'"'+dash+'/>';
+  });
+  const areas={};
+  keys.forEach(k=>{const a=P[k].area||"";(areas[a]=areas[a]||[]).push(k);});
+  let alab="";
+  Object.entries(areas).forEach(([a,ks])=>{
+    if(!a||ks.length<2) return;
+    const cx=ks.reduce((t,k)=>t+px(X(k)),0)/ks.length;
+    const cy=Math.min(...ks.map(k=>py(Y(k))))-18;
+    alab+='<text class="marea" x="'+cx.toFixed(0)+'" y="'+cy.toFixed(0)+'" text-anchor="middle" fill="var(--ink3)">'+esc(a)+'</text>';
+  });
+  const nodes=keys.map(k=>{
+    const pl=P[k], c=(MAPTYPE[pl.type]||MAPTYPE.sight)[0];
+    const x=px(X(k)).toFixed(1), y=py(Y(k)).toFixed(1);
+    const nm=pl.n.split("（")[0].replace(/^[^一-鿿A-Za-z0-9가-힯]+/,"").slice(0,9);
+    return '<g class="mnode" data-mp="'+k+'">'
+      +'<circle cx="'+x+'" cy="'+y+'" r="17" class="hit"></circle>'
+      +'<circle cx="'+x+'" cy="'+y+'" r="6.5" fill="'+c+'" stroke="var(--card)" stroke-width="2"></circle>'
+      +'<text x="'+x+'" y="'+(+y-11).toFixed(1)+'" text-anchor="middle" fill="var(--ink)" stroke="var(--card)">'+esc(nm)+'</text>'
+      +'</g>';}).join("");
+  return '<svg viewBox="0 0 '+W+' '+H+'" id="mapsvg" role="img" aria-label="所有地點的相對位置圖">'
+    +'<g id="mapg" transform="translate('+mapT.x+' '+mapT.y+') scale('+mapT.k+')">'+routes+alab+nodes+'</g>'
+    +'<g transform="translate(18 '+(H-18)+')">'
+      +'<line x1="0" y1="0" x2="'+barPx.toFixed(0)+'" y2="0" stroke="var(--ink2)" stroke-width="3"/>'
+      +'<line x1="0" y1="-5" x2="0" y2="5" stroke="var(--ink2)" stroke-width="3"/>'
+      +'<line x1="'+barPx.toFixed(0)+'" y1="-5" x2="'+barPx.toFixed(0)+'" y2="5" stroke="var(--ink2)" stroke-width="3"/>'
+      +'<text x="'+(barPx/2).toFixed(0)+'" y="-10" text-anchor="middle" font-size="13" font-weight="700" fill="var(--ink2)">'+(targetKm<1?(targetKm*1000)+" m":targetKm+" km")+'</text>'
+    +'</g>'
+    +'<g transform="translate('+(W-30)+' 34)">'
+      +'<path d="M0 -16 L6 6 L0 1 L-6 6 Z" fill="var(--ink2)"/>'
+      +'<text x="0" y="20" text-anchor="middle" font-size="12" font-weight="700" fill="var(--ink2)">N</text>'
+    +'</g></svg>';
+}
+function mapApply(){
+  const g=$("#mapg");
+  if(g){ g.setAttribute("transform","translate("+mapT.x+" "+mapT.y+") scale("+mapT.k+")");
+         g.classList.toggle("zoomed", mapT.k>1.5); }
+  const hint=$("#maphint"); if(hint) hint.textContent = mapT.k>1.5 ? "拖曳移動" : "放大看店名 →";
+}
+function mapZoom(f){
+  const sv=$("#mapsvg"); if(!sv) return;
+  const vb=sv.viewBox.baseVal, cx=vb.width/2, cy=vb.height/2;
+  const k2=Math.min(6,Math.max(1,mapT.k*f));
+  mapT.x=cx-(cx-mapT.x)*(k2/mapT.k); mapT.y=cy-(cy-mapT.y)*(k2/mapT.k); mapT.k=k2;
+  if(mapT.k<=1.001){mapT.k=1;mapT.x=0;mapT.y=0;} mapApply();
+}
+function bindMapPan(){
+  const wrap=$("#mapwrap"); if(!wrap||wrap._bound) return; wrap._bound=1;
+  const pts=new Map(); let last=null,lastD=0,moved=0;
+  const svp=e=>{const sv=$("#mapsvg");if(!sv)return{x:0,y:0};
+    const r=sv.getBoundingClientRect(),vb=sv.viewBox.baseVal;
+    return {x:(e.clientX-r.left)/r.width*vb.width,y:(e.clientY-r.top)/r.height*vb.height};};
+  wrap.addEventListener("pointerdown",e=>{try{wrap.setPointerCapture(e.pointerId);}catch(_){}
+    pts.set(e.pointerId,svp(e)); if(pts.size===1){last=svp(e);moved=0;}});
+  wrap.addEventListener("pointermove",e=>{
+    if(!pts.has(e.pointerId))return; pts.set(e.pointerId,svp(e));
+    const a=[...pts.values()];
+    if(a.length>=2){
+      const d=Math.hypot(a[0].x-a[1].x,a[0].y-a[1].y);
+      if(lastD){const mx=(a[0].x+a[1].x)/2,my=(a[0].y+a[1].y)/2;
+        const k2=Math.min(6,Math.max(1,mapT.k*(d/lastD)));
+        mapT.x=mx-(mx-mapT.x)*(k2/mapT.k); mapT.y=my-(my-mapT.y)*(k2/mapT.k); mapT.k=k2; mapApply();}
+      lastD=d; moved=99; return;
+    }
+    if(last){const c=svp(e);mapT.x+=c.x-last.x;mapT.y+=c.y-last.y;
+      moved+=Math.abs(c.x-last.x)+Math.abs(c.y-last.y);last=c;mapApply();}
+  });
+  const up=e=>{pts.delete(e.pointerId); if(pts.size<2)lastD=0;
+    if(!pts.size){wrap._moved=moved;last=null;}};
+  wrap.addEventListener("pointerup",up); wrap.addEventListener("pointercancel",up);
+}
+function openPlace(k){
+  const pl=P[k]; if(!pl) return;
+  const cf=confOf(pl), day=dayOf(k);
+  $("#sheetPanel").innerHTML='<button class="x" data-close aria-label="關閉">✕</button><div class="grab"></div>'
+    +'<div class="in">'
+    +'<div class="tags" style="margin:2px 0 8px">'
+      +(day?'<span class="tag t-must">'+day+'</span>':"")
+      +(pl.tag?'<span class="tag t-'+(pl.type==="food"||pl.type==="cafe"?"food":pl.type==="shop"?"shop":"view")+'">'+esc(pl.tag)+'</span>':"")
+      +'<span class="conf '+cf[0]+'">'+cf[1]+'</span></div>'
+    +'<h3>'+esc(pl.n)+'</h3>'
+    +'<div class="kr">'+esc(pl.kr)+(pl.addr&&pl.addr!==pl.kr?" · "+esc(pl.addr):"")+'</div>'
+    +(pl.price?'<div class="meta" style="margin-top:6px">💰 '+esc(pl.price)+'</div>':"")
+    +detailBlock(pl)+actsHTML(pl)+'</div>';
+  $("#sheet").classList.add("on"); document.body.style.overflow="hidden";
 }
 
 /* ---------- 韓文 ---------- */
@@ -1149,6 +1314,12 @@ document.addEventListener("click",e=>{
   if(t.closest("[data-close]")){closeSheet();return}
   const igf=t.closest("[data-igf]");        if(igf){igFilter=igf.dataset.igf;renderIG();window.scrollTo({top:0,behavior:"instant"});return}
   const igc=t.closest("[data-ig]");         if(igc){openSheet(igc.dataset.ig);return}
+  const mz=t.closest("[data-mzoom]");
+  if(mz){const v=mz.dataset.mzoom; if(v==="reset"){mapT={k:1,x:0,y:0};mapApply();} else mapZoom(+v); return}
+  const md=t.closest("[data-mday]");
+  if(md){mapDay=md.dataset.mday; mapT={k:1,x:0,y:0}; renderMap(); window.scrollTo({top:0,behavior:"instant"}); return}
+  const mp=t.closest("[data-mp]");
+  if(mp){const w=$("#mapwrap"); if(w&&w._moved>6){w._moved=0;return;} openPlace(mp.dataset.mp); return}
   const gd=t.closest("[data-goday]");
   if(gd){const i=DAYS.findIndex(d=>d.label.startsWith(gd.dataset.goday));
     closeSheet(); if(i>=0){planMode="day";curDay=i;} go("plan"); return}
